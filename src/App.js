@@ -1,53 +1,91 @@
 import React, { useState } from 'react';
+import Select from 'react-select';
+import countries from './countries'; // Імпортуємо список країн
+import './App.css';
 
 function App() {
   const [input1, setInput1] = useState('');
   const [input2, setInput2] = useState('');
   const [input3, setInput3] = useState('');
   const [input4, setInput4] = useState('');
-  const [newInput, setNewInput] = useState('');
-  
+  const [inputs, setInputs] = useState([]);
+
   const handleSearch = () => {
-    // Генерація посилання з введених даних
-    const link = `https://example.com/?input1=${input1}&input2=${input2}&input3=${input3}&input4=${input4}`;
-    // Перенаправлення на нову вкладку
+    // Збираємо текст з усіх інпутів з додаванням "AND"
+    const inputValues = {
+      input1: input1 ? `${input1}+AND` : '',
+      input2: input2 ? `${input2}+AND` : '',
+      input3: input3 ? `${input3}+AND` : '',
+      input4: input4 ? `${input4}+AND` : '',
+      ...inputs.reduce((acc, currentValue, index) => {
+        acc[`input${index + 5}`] = currentValue ? `${currentValue}+AND` : '';
+        return acc;
+      }, {})
+    };
+
+    // Формуємо посилання зі зібраними значеннями
+    const queryString = Object.entries(inputValues)
+      .map(([key, value]) => value)
+      .filter(value => value !== '')
+      .join('+');
+    const link = `https://www.google.com/search?q=site:linkedin.com/in/ ${queryString}`;
+
+    // Відкриваємо посилання у новому вікні
     window.open(link, '_blank');
   }
 
   const handleAddInput = () => {
-    // Додавання нового інпуту
-    // Якщо потрібно, ви можете додати валідацію для нового інпуту тут
-    // Наприклад, перевірку на максимальну кількість інпутів або на наявність значення
-    setNewInput('');
+    setInputs([...inputs, '']);
+  }
+
+  const handleInputChange = (index, value) => {
+    const newInputs = [...inputs];
+    newInputs[index] = value;
+    setInputs(newInputs);
+  }
+
+  const handleInputClose = (index) => {
+    const newInputs = [...inputs];
+    newInputs.splice(index, 1);
+    setInputs(newInputs);
   }
 
   return (
-    <div>
-      {/* Хедер */}
+    <div style={{ marginLeft: '200px' }}>
       <header>
         <h1>Мій проект</h1>
       </header>
 
-      {/* Інпути */}
-      <div>
-        <input type="text" value={input1} onChange={(e) => setInput1(e.target.value)} />
-        <input type="text" value={input2} onChange={(e) => setInput2(e.target.value)} />
-      </div>
-      <div>
-        <input type="text" value={input3} onChange={(e) => setInput3(e.target.value)} />
-        <input type="text" value={input4} onChange={(e) => setInput4(e.target.value)} />
+      <div className="input-container">
+        <Select
+          className="select-country"
+          placeholder="Виберіть країну"
+          onChange={(selectedOption) => setInput1(selectedOption.value)}
+          options={countries}
+          styles={{ width: '300px', marginRight: '10px' }}
+        />
+        <input type="text" placeholder="Введіть значення для input2" value={input2} onChange={(e) => setInput2(e.target.value)} style={{ width: '300px', height: '30px' }} />
       </div>
 
-      {/* Додавання нових інпутів */}
-      <div>
-        <input type="text" value={newInput} onChange={(e) => setNewInput(e.target.value)} />
+      <div className="input-container">
+        <input type="text" placeholder="Введіть значення для input3" value={input3} onChange={(e) => setInput3(e.target.value)} style={{ width: '300px', height: '30px', marginRight: '10px' }} />
+        <input type="text" placeholder="Введіть значення для input4" value={input4} onChange={(e) => setInput4(e.target.value)} style={{ width: '300px', height: '30px' }} />
+      </div>
+
+      {inputs.map((value, index) => (
+        <div key={index} className="input-container">
+          <input type="text" placeholder={`Введіть значення для input${index + 5}`} value={value} onChange={(e) => handleInputChange(index, e.target.value)} style={{ width: '300px', height: '30px', marginRight: '10px' }} />
+          <button onClick={() => handleInputClose(index)}>✖</button>
+        </div>
+      ))}
+      <div style={{ marginBottom: '10px' }}>
         <button onClick={handleAddInput}>Додати інпут</button>
       </div>
 
-      {/* Кнопка Search */}
-      <button style={{ backgroundColor: 'yellow' }} onClick={handleSearch}>Search</button>
+      <div style={{ marginBottom: '10px' }}>
+        <button style={{ backgroundColor: 'yellow', width: '100px', height: '50px', marginRight: '10px', borderRadius: '25px' }} onClick={handleSearch}><b>Пошук</b></button>
+      </div>
 
-      {/* Футер */}
       <footer>
         <p>Мій футер</p>
       </footer>
