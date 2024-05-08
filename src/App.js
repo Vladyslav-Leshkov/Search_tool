@@ -4,21 +4,27 @@ import countries from './countries'; // Імпортуємо список кра
 import './App.css';
 
 function App() {
-  const [input1, setInput1] = useState('');
-  const [input2, setInput2] = useState('');
-  const [input3, setInput3] = useState('');
-  const [input4, setInput4] = useState('');
-  const [inputs, setInputs] = useState([]);
+  //const [input1, setInput1] = useState('');
+  const [location, setLocation] = useState('');
+  const [jobTitle, setJobTitle] = useState('');
+  const [keywordToInclude, setKeywordToInclude] = useState('');
+  const [keywordToExclude, setKeywordToExclude] = useState('');
+  const [inputsLeft, setInputsLeft] = useState([]);
+  const [inputsRight, setInputsRight] = useState([]);
 
   const handleSearch = () => {
-    // Збираємо текст з усіх інпутів з додаванням "AND"
+    // Збираємо текст з усіх інпутів з додаванням "AND" або "-"
     const inputValues = {
-      input1: input1 ? `${input1}+AND` : '',
-      input2: input2 ? `${input2}+AND` : '',
-      input3: input3 ? `${input3}+AND` : '',
-      input4: input4 ? `${input4}+AND` : '',
-      ...inputs.reduce((acc, currentValue, index) => {
-        acc[`input${index + 5}`] = currentValue ? `${currentValue}+AND` : '';
+      input3: jobTitle ? `intitle:${jobTitle}` : '',
+      input2: location ? `${location}+AND` : '',
+      input5: keywordToInclude ? `${keywordToInclude}+AND` : '',
+      input4: keywordToExclude ? `-${keywordToExclude}+AND` : '',
+      ...inputsRight.reduce((acc, currentValue, index) => {
+        acc[`input${index + 6}`] = currentValue ? `-${currentValue}+AND` : '';
+        return acc;
+      }, {}),
+      ...inputsLeft.reduce((acc, currentValue, index) => {
+        acc[`input${index + 6}`] = currentValue ? `${currentValue}+AND` : '';
         return acc;
       }, {})
     };
@@ -34,61 +40,105 @@ function App() {
     window.open(link, '_blank');
   }
 
-  const handleAddInput = () => {
-    setInputs([...inputs, '']);
+  const handleAddInputLeft = () => {
+    setInputsLeft([...inputsLeft, '']);
   }
 
-  const handleInputChange = (index, value) => {
-    const newInputs = [...inputs];
+  const handleAddInputRight = () => {
+    setInputsRight([...inputsRight, '']);
+  }
+
+  const handleInputChangeLeft = (index, value) => {
+    const newInputs = [...inputsLeft];
     newInputs[index] = value;
-    setInputs(newInputs);
+    setInputsLeft(newInputs);
   }
 
-  const handleInputClose = (index) => {
-    const newInputs = [...inputs];
+  const handleInputChangeRight = (index, value) => {
+    const newInputs = [...inputsRight];
+    newInputs[index] = value;
+    setInputsRight(newInputs);
+  }
+
+  const handleInputCloseLeft = (index) => {
+    const newInputs = [...inputsLeft];
     newInputs.splice(index, 1);
-    setInputs(newInputs);
+    setInputsLeft(newInputs);
+  }
+
+  const handleInputCloseRight = (index) => {
+    const newInputs = [...inputsRight];
+    newInputs.splice(index, 1);
+    setInputsRight(newInputs);
   }
 
   return (
-    <div style={{ marginLeft: '200px' }}>
-      <header>
+    <div>
+      <div className="header">
         <h1>Мій проект</h1>
-      </header>
-
-      <div className="input-container">
-        <Select
-          className="select-country"
-          placeholder="Виберіть країну"
-          onChange={(selectedOption) => setInput1(selectedOption.value)}
-          options={countries}
-          styles={{ width: '300px', marginRight: '10px' }}
-        />
-        <input type="text" placeholder="Введіть значення для input2" value={input2} onChange={(e) => setInput2(e.target.value)} style={{ width: '300px', height: '30px' }} />
       </div>
-
-      <div className="input-container">
-        <input type="text" placeholder="Введіть значення для input3" value={input3} onChange={(e) => setInput3(e.target.value)} style={{ width: '300px', height: '30px', marginRight: '10px' }} />
-        <input type="text" placeholder="Введіть значення для input4" value={input4} onChange={(e) => setInput4(e.target.value)} style={{ width: '300px', height: '30px' }} />
-      </div>
-
-      {inputs.map((value, index) => (
-        <div key={index} className="input-container">
-          <input type="text" placeholder={`Введіть значення для input${index + 5}`} value={value} onChange={(e) => handleInputChange(index, e.target.value)} style={{ width: '300px', height: '30px', marginRight: '10px' }} />
-          <button onClick={() => handleInputClose(index)}>✖</button>
+      
+      <div className="container">
+        <div className="left-container">
+          <div className="input-container">
+            <Select
+              className="select-country"
+              placeholder="Виберіть країну"
+              //onChange={(selectedOption) => setInput1(selectedOption.value)}
+              options={countries}
+              styles={{ width: '300px', marginRight: '10px' }}
+            />
+          </div>
+          
+          <div className="input-container">
+            <input type="text" placeholder="Job title" value={jobTitle} onChange={(e) => setJobTitle(e.target.value)} style={{ width: '300px', height: '30px', marginTop: '10px' }} />
+          </div>
+          
+          <div className="input-container">
+            <input type="text" placeholder="Keyword to include" value={keywordToInclude} onChange={(e) => setKeywordToInclude(e.target.value)} style={{ width: '300px', height: '30px', marginTop: '10px' }} />
+          </div>
+          
+          <div style={{ marginBottom: '10px' }}>
+            <button onClick={handleAddInputLeft}>Додати інпут</button>
+          </div>
+          
+          {inputsLeft.map((value, index) => (
+            <div key={index} className="input-container">
+              <input type="text" placeholder={`Введіть значення для input${index + 5}`} value={value} onChange={(e) => handleInputChangeLeft(index, e.target.value)} style={{ width: '300px', height: '30px', marginRight: '10px' }} />
+              <button onClick={() => handleInputCloseLeft(index)}>✖</button>
+            </div>
+          ))}
         </div>
-      ))}
-      <div style={{ marginBottom: '10px' }}>
-        <button onClick={handleAddInput}>Додати інпут</button>
+        
+        <div className="right-container">
+          <div className="input-container">
+            <input type="text" placeholder="Location" value={location} onChange={(e) => setLocation(e.target.value)} style={{ width: '300px', height: '30px', marginRight: '10px' }} />
+          </div>
+          
+          <div className="input-container">
+            <input type="text" placeholder="Keyword to exclude" value={keywordToExclude} onChange={(e) => setKeywordToExclude(e.target.value)} style={{ width: '300px', height: '30px', marginTop: '10px' }} />
+          </div>
+          
+          <div style={{ marginBottom: '10px' }}>
+            <button onClick={handleAddInputRight}>Додати інпут</button>
+          </div>
+          
+          {inputsRight.map((value, index) => (
+            <div key={index} className="input-container">
+              <input type="text" placeholder={`Введіть значення для input${index + 5}`} value={value} onChange={(e) => handleInputChangeRight(index, e.target.value)} style={{ width: '300px', height: '30px', marginRight: '10px' }} />
+              <button onClick={() => handleInputCloseRight(index)}>✖</button>
+            </div>
+          ))}
+        </div>
       </div>
-
-      <div style={{ marginBottom: '10px' }}>
-        <button style={{ backgroundColor: 'yellow', width: '100px', height: '50px', marginRight: '10px', borderRadius: '25px' }} onClick={handleSearch}><b>Пошук</b></button>
+      
+      <div className="footer">
+        <p>Pytin Xyilo</p>
       </div>
-
-      <footer>
-        <p>Мій футер</p>
-      </footer>
+      
+      <div style={{ marginBottom: '10px' }}>
+        <button style={{ backgroundColor: 'Blue', width: '400px', height: '80px', marginRight: '10px', borderRadius: '25px' }} onClick={handleSearch}><b>X-Ray search via LinkedIn</b></button>
+      </div>
     </div>
   );
 }
