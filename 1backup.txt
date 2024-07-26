@@ -1,11 +1,11 @@
+/* App.js */
+
 import React, { useState } from 'react';
 import Select from 'react-select';
-import countriesList from './countries';
-import Header from './Header';
+import countries from './countries'; // Імпортуємо список країн
 import './App.css';
 
 function App() {
-  const [selectedCountry, setSelectedCountry] = useState(null);
   const [location, setLocation] = useState('');
   const [jobTitle, setJobTitle] = useState('');
   const [keywordToInclude, setKeywordToInclude] = useState('');
@@ -14,19 +14,17 @@ function App() {
   const [inputsRight, setInputsRight] = useState([]);
 
   const handleSearch = () => {
-    const encodeValue = (value) => encodeURIComponent(value);
-
     const inputValues = {
-      input3: jobTitle ? `intitle:${encodeValue(jobTitle)}` : '',
-      input2: location ? `${encodeValue(location)}+AND` : '',
-      input5: keywordToInclude ? `${encodeValue(keywordToInclude)}+AND` : '',
-      input4: keywordToExclude ? `-${encodeValue(keywordToExclude)}+AND` : '',
-      ...inputsLeft.reduce((acc, currentValue, index) => {
-        acc[`inputL${index + 6}`] = currentValue ? `${encodeValue(currentValue)}+AND` : '';
+      input3: jobTitle ? `intitle:${jobTitle}` : '',
+      input2: location ? `${location}+AND` : '',
+      input5: keywordToInclude ? `${keywordToInclude}+AND` : '',
+      input4: keywordToExclude ? `-${keywordToExclude}+AND` : '',
+      ...inputsRight.reduce((acc, currentValue, index) => {
+        acc[`inputR${index + 6}`] = currentValue ? `-${currentValue}+AND` : '';
         return acc;
       }, {}),
-      ...inputsRight.reduce((acc, currentValue, index) => {
-        acc[`inputR${index + 6}`] = currentValue ? `-${encodeValue(currentValue)}+AND` : '';
+      ...inputsLeft.reduce((acc, currentValue, index) => {
+        acc[`inputL${index + 6}`] = currentValue ? `${currentValue}+AND` : '';
         return acc;
       }, {})
     };
@@ -35,17 +33,7 @@ function App() {
       .map(([key, value]) => value)
       .filter(value => value !== '')
       .join('+');
-
-    let link = 'https://www.google.com/search?q=site:linkedin.com/in ';
-
-    if (selectedCountry) {
-      const countryCode = selectedCountry.code.toLowerCase();
-      link = `https://www.google.com/search?q=site:${countryCode}.linkedin.com/in `;
-    }
-
-    if (queryString) {
-      link += `${queryString}`;
-    }
+    const link = `https://www.google.com/search?q=site:linkedin.com/in/ ${queryString}`;
 
     window.open(link, '_blank');
   };
@@ -84,19 +72,15 @@ function App() {
 
   return (
     <div>
-      <Header />
+      <div className="header">
+        <h1>Мій проект</h1>
+      </div>
 
       <div className="container">
         <div className="left-container">
           <div className="input-container">
-            <label>Select a country</label>
-            <Select
-              className="select-country"
-              options={countriesList}
-              getOptionLabel={(option) => option.value}
-              getOptionValue={(option) => option.value}
-              onChange={(selectedOption) => setSelectedCountry(selectedOption)}
-            />
+            <label>Виберіть країну</label>
+            <Select className="select-country" options={countries} />
           </div>
 
           <div className="input-container">
@@ -120,21 +104,23 @@ function App() {
                 onChange={(e) => setKeywordToInclude(e.target.value)}
                 className="input"
               />
-              <button onClick={handleAddInputLeft} className="add-input-button">Add input</button>
+              <button onClick={handleAddInputLeft} className="add-input-button">Додати інпут</button>
             </div>
           </div>
 
           {inputsLeft.map((value, index) => (
-            <div key={index} className="input-with-close">
-              <label>{`Enter value for inputL${index + 6}`}</label>
-              <input
-                type="text"
-                placeholder={`Enter value for inputL${index + 6}`}
-                value={value}
-                onChange={(e) => handleInputChangeLeft(index, e.target.value)}
-                className="input"
-              />
-              <button onClick={() => handleInputCloseLeft(index)} className="close-button">✖</button>
+            <div key={index} className="input-container">
+              <label>{`Введіть значення для inputL${index + 6}`}</label>
+              <div className="input-with-close">
+                <input
+                  type="text"
+                  placeholder={`Введіть значення для inputL${index + 6}`}
+                  value={value}
+                  onChange={(e) => handleInputChangeLeft(index, e.target.value)}
+                  className="input"
+                />
+                <button onClick={() => handleInputCloseLeft(index)} className="close-button">✖</button>
+              </div>
             </div>
           ))}
         </div>
@@ -161,32 +147,36 @@ function App() {
                 onChange={(e) => setKeywordToExclude(e.target.value)}
                 className="input"
               />
-              <button onClick={handleAddInputRight} className="add-input-button">Add input</button>
+              <button onClick={handleAddInputRight} className="add-input-button">Додати інпут</button>
             </div>
           </div>
 
           {inputsRight.map((value, index) => (
-            <div key={index} className="input-with-close">
-              <label>{`Enter value for inputR${index + 6}`}</label>
-              <input
-                type="text"
-                placeholder={`Enter value for inputR${index + 6}`}
-                value={value}
-                onChange={(e) => handleInputChangeRight(index, e.target.value)}
-                className="input"
-              />
-              <button onClick={() => handleInputCloseRight(index)} className="close-button">✖</button>
+            <div key={index} className="input-container">
+              <label>{`Введіть значення для inputR${index + 6}`}</label>
+              <div className="input-with-close">
+                <input
+                  type="text"
+                  placeholder={`Введіть значення для inputR${index + 6}`}
+                  value={value}
+                  onChange={(e) => handleInputChangeRight(index, e.target.value)}
+                  className="input"
+                />
+                <button onClick={() => handleInputCloseRight(index)} className="close-button">✖</button>
+              </div>
             </div>
           ))}
         </div>
       </div>
 
       <div className="button-container-center">
-        <button className="search-button" onClick={handleSearch}><b>X-Ray search via LinkedIn</b></button>
+        <button className="search-button" onClick={handleSearch}>
+          <b>X-Ray search via LinkedIn</b>
+        </button>
       </div>
 
       <div className="footer">
-        <p>Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo</p>
+        <p>Pytin Xyilo</p>
       </div>
     </div>
   );
