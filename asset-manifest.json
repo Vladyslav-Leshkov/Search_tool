@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/Search_tool/static/css/main.3621323a.css",
+    "main.js": "/Search_tool/static/js/main.68a1664e.js",
+    "static/js/453.5455e8c0.chunk.js": "/Search_tool/static/js/453.5455e8c0.chunk.js",
+    "static/media/Jobzz_logo128x128.png": "/Search_tool/static/media/Jobzz_logo128x128.d385c85d500cb7fd9451.png",
+    "index.html": "/Search_tool/index.html",
+    "main.3621323a.css.map": "/Search_tool/static/css/main.3621323a.css.map",
+    "main.68a1664e.js.map": "/Search_tool/static/js/main.68a1664e.js.map",
+    "453.5455e8c0.chunk.js.map": "/Search_tool/static/js/453.5455e8c0.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.3621323a.css",
+    "static/js/main.68a1664e.js"
+  ]
+}
