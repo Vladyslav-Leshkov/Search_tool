@@ -38,7 +38,7 @@ function App() {
 
     let link = 'https://www.google.com/search?q=site:linkedin.com/in ';
 
-    if (selectedCountry) {
+    if (selectedCountry && selectedCountry.value !== 'All countries') {
       const countryCode = selectedCountry.code.toLowerCase();
       link = `https://www.google.com/search?q=site:${countryCode}.linkedin.com/in `;
     }
@@ -103,7 +103,7 @@ function App() {
             <label>Job title</label>
             <input
               type="text"
-              placeholder="Job title"
+              placeholder="Front-End"
               value={jobTitle}
               onChange={(e) => setJobTitle(e.target.value)}
               className="input"
@@ -115,7 +115,7 @@ function App() {
             <div className="input-with-button">
               <input
                 type="text"
-                placeholder="Keyword to include"
+                placeholder="React"
                 value={keywordToInclude}
                 onChange={(e) => setKeywordToInclude(e.target.value)}
                 className="input"
@@ -126,10 +126,10 @@ function App() {
 
           {inputsLeft.map((value, index) => (
             <div key={index} className="input-with-close">
-              <label>{`Enter value for inputL${index + 6}`}</label>
+              <label>{`Keyword to include${index + 2}`}</label>
               <input
                 type="text"
-                placeholder={`Enter value for inputL${index + 6}`}
+                placeholder={`One more skill`}
                 value={value}
                 onChange={(e) => handleInputChangeLeft(index, e.target.value)}
                 className="input"
@@ -144,7 +144,7 @@ function App() {
             <label>Location</label>
             <input
               type="text"
-              placeholder="Location"
+              placeholder="Kyiv"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
               className="input"
@@ -156,7 +156,7 @@ function App() {
             <div className="input-with-button">
               <input
                 type="text"
-                placeholder="Keyword to exclude"
+                placeholder="Recruiter"
                 value={keywordToExclude}
                 onChange={(e) => setKeywordToExclude(e.target.value)}
                 className="input"
@@ -167,10 +167,10 @@ function App() {
 
           {inputsRight.map((value, index) => (
             <div key={index} className="input-with-close">
-              <label>{`Enter value for inputR${index + 6}`}</label>
+              <label>{`Keyword to exclude${index + 2}`}</label>
               <input
                 type="text"
-                placeholder={`Enter value for inputR${index + 6}`}
+                placeholder={`One more`}
                 value={value}
                 onChange={(e) => handleInputChangeRight(index, e.target.value)}
                 className="input"
@@ -186,7 +186,7 @@ function App() {
       </div>
 
       <div className="footer">
-        <p>Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo</p>
+        <p>Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo</p>
       </div>
     </div>
   );
