@@ -17,16 +17,16 @@ function App() {
     const encodeValue = (value) => encodeURIComponent(value);
 
     const inputValues = {
-      input3: jobTitle ? `intitle:${encodeValue(jobTitle)}` : '',
-      input2: location ? `${encodeValue(location)}+AND` : '',
-      input5: keywordToInclude ? `${encodeValue(keywordToInclude)}+AND` : '',
-      input4: keywordToExclude ? `-${encodeValue(keywordToExclude)}+AND` : '',
+      input3: jobTitle ? `intitle:"${encodeValue(jobTitle)}"` : '',
+      input2: location ? `"${encodeValue(location)}"+AND` : '',
+      input5: keywordToInclude ? `"${encodeValue(keywordToInclude)}"+AND` : '',
+      input4: keywordToExclude ? `-"${encodeValue(keywordToExclude)}"+AND` : '',
       ...inputsLeft.reduce((acc, currentValue, index) => {
-        acc[`inputL${index + 6}`] = currentValue ? `${encodeValue(currentValue)}+AND` : '';
+        acc[`inputL${index + 6}`] = currentValue ? `"${encodeValue(currentValue)}"+AND` : '';
         return acc;
       }, {}),
       ...inputsRight.reduce((acc, currentValue, index) => {
-        acc[`inputR${index + 6}`] = currentValue ? `-${encodeValue(currentValue)}+AND` : '';
+        acc[`inputR${index + 6}`] = currentValue ? `-"${encodeValue(currentValue)}"+AND` : '';
         return acc;
       }, {})
     };
@@ -186,7 +186,7 @@ function App() {
       </div>
 
       <div className="footer">
-        <p>Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo Pytin Xyilo</p>
+        <p> Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo</p>
       </div>
     </div>
   );
