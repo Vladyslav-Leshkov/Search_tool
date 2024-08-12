@@ -3,12 +3,59 @@ import Select from 'react-select';
 import countriesList from './countries';
 import Header from './Header';
 import './App.css';
+import CreatableSelect from 'react-select/creatable';
+
+const components = {
+  DropdownIndicator: null,
+};
+
+const createOption = (label) => ({
+  label,
+  value: label,
+});
+
+const MultiSelectTextInput = ({ value, onChange }) => {
+  const [inputValue, setInputValue] = useState('');
+  const [selectedOptions, setSelectedOptions] = useState(value);
+
+  const handleKeyDown = (event) => {
+    if (!inputValue) return;
+    switch (event.key) {
+      case 'Enter':
+      case 'Tab':
+        const newOption = createOption(inputValue);
+        const updatedOptions = [...selectedOptions, newOption];
+        setSelectedOptions(updatedOptions);
+        onChange(updatedOptions);
+        setInputValue('');
+        event.preventDefault();
+    }
+  };
+
+  return (
+    <CreatableSelect
+      className="creatable-select"
+      components={components}
+      inputValue={inputValue}
+      isClearable
+      isMulti
+      menuIsOpen={false}
+      onChange={(newValue) => {
+        setSelectedOptions(newValue);
+        onChange(newValue);
+      }}
+      onInputChange={(newValue) => setInputValue(newValue)}
+      onKeyDown={handleKeyDown}
+      value={selectedOptions}
+    />
+  );
+};
 
 function App() {
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [location, setLocation] = useState('');
   const [jobTitle, setJobTitle] = useState('');
-  const [keywordToInclude, setKeywordToInclude] = useState('');
+  const [keywordsToInclude, setKeywordsToInclude] = useState([]);
   const [keywordToExclude, setKeywordToExclude] = useState('');
   const [inputsLeft, setInputsLeft] = useState([]);
   const [inputsRight, setInputsRight] = useState([]);
@@ -19,8 +66,8 @@ function App() {
     const inputValues = {
       input3: jobTitle ? `intitle:"${encodeValue(jobTitle)}"` : '',
       input2: location ? `"${encodeValue(location)}"+AND` : '',
-      input5: keywordToInclude ? `"${encodeValue(keywordToInclude)}"+AND` : '',
-      input4: keywordToExclude ? `-"${encodeValue(keywordToExclude)}"+AND` : '',
+      input5: keywordsToInclude.length > 0 ? `${keywordsToInclude.map(k => `"${encodeValue(k.value)}"+AND `).join('')}` : '',
+      input4: keywordToExclude.length > 0 ? `${keywordToExclude.map(k => `-"${encodeValue(k.value)}"+AND `).join('')}` : '',
       ...inputsLeft.reduce((acc, currentValue, index) => {
         acc[`inputL${index + 6}`] = currentValue ? `"${encodeValue(currentValue)}"+AND` : '';
         return acc;
@@ -112,16 +159,10 @@ function App() {
 
           <div className="input-container">
             <label>Keyword to include</label>
-            <div className="input-with-button">
-              <input
-                type="text"
-                placeholder="React"
-                value={keywordToInclude}
-                onChange={(e) => setKeywordToInclude(e.target.value)}
-                className="input"
-              />
-              <button onClick={handleAddInputLeft} className="add-input-button">Add input</button>
-            </div>
+            <MultiSelectTextInput
+              value={keywordsToInclude}
+              onChange={(selectedOptions) => setKeywordsToInclude(selectedOptions || [])}
+            />
           </div>
 
           {inputsLeft.map((value, index) => (
@@ -129,7 +170,7 @@ function App() {
               <label>{`Keyword to include${index + 2}`}</label>
               <input
                 type="text"
-                placeholder={`One more skill`}
+                placeholder="One more skill"
                 value={value}
                 onChange={(e) => handleInputChangeLeft(index, e.target.value)}
                 className="input"
@@ -153,16 +194,10 @@ function App() {
 
           <div className="input-container">
             <label>Keyword to exclude</label>
-            <div className="input-with-button">
-              <input
-                type="text"
-                placeholder="Recruiter"
-                value={keywordToExclude}
-                onChange={(e) => setKeywordToExclude(e.target.value)}
-                className="input"
-              />
-              <button onClick={handleAddInputRight} className="add-input-button">Add input</button>
-            </div>
+            <MultiSelectTextInput
+              value={keywordToExclude}
+              onChange={(selectedOptions) => setKeywordToExclude(selectedOptions || [])}
+            />
           </div>
 
           {inputsRight.map((value, index) => (
@@ -170,7 +205,7 @@ function App() {
               <label>{`Keyword to exclude${index + 2}`}</label>
               <input
                 type="text"
-                placeholder={`One more`}
+                placeholder="One more"
                 value={value}
                 onChange={(e) => handleInputChangeRight(index, e.target.value)}
                 className="input"
@@ -186,7 +221,7 @@ function App() {
       </div>
 
       <div className="footer">
-        <p> Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo</p>
+        <p>Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo Putin Huylo</p>
       </div>
     </div>
   );
