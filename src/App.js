@@ -9,12 +9,13 @@ const components = {
   DropdownIndicator: null,
 };
 
+// Функція для створення нових опцій
 const createOption = (label) => ({
   label,
   value: label,
 });
 
-const MultiSelectTextInput = ({ value, onChange }) => {
+const MultiSelectTextInput = ({ value, onChange, placeholder }) => {
   const [inputValue, setInputValue] = useState('');
   const [selectedOptions, setSelectedOptions] = useState(value);
 
@@ -45,6 +46,7 @@ const MultiSelectTextInput = ({ value, onChange }) => {
       onInputChange={(newValue) => setInputValue(newValue)}
       onKeyDown={handleKeyDown}
       value={selectedOptions}
+      placeholder={placeholder} // Додаємо кастомний placeholder
     />
   );
 };
@@ -54,7 +56,7 @@ function App() {
   const [location, setLocation] = useState('');
   const [jobTitle, setJobTitle] = useState('');
   const [keywordsToInclude, setKeywordsToInclude] = useState([]);
-  const [keywordsToExclude, setKeywordsToExclude] = useState('');
+  const [keywordsToExclude, setKeywordsToExclude] = useState([]);
 
   const handleSearch = () => {
     const encodeValue = (value) => encodeURIComponent(value);
@@ -124,6 +126,7 @@ function App() {
           <MultiSelectTextInput
             value={keywordsToInclude}
             onChange={(selectedOptions) => setKeywordsToInclude(selectedOptions || [])}
+            placeholder="react"
           />
         </div>
 
@@ -132,14 +135,15 @@ function App() {
           <MultiSelectTextInput
             value={keywordsToExclude}
             onChange={(selectedOptions) => setKeywordsToExclude(selectedOptions || [])}
+            placeholder="recruiter"
           />
         </div>
       </div>
       <div className="button-container-center">
-        <button className="search-button" onClick={handleSearch}><b>X-Ray search via LinkedIn</b></button>
+        <button className="search-button" onClick={handleSearch}><b>Start X-Ray search on LinkedIn</b></button>
       </div>
       <div className="footer">
-        <p>Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo</p>
+        <p>Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo Putin Huilo</p>
       </div>
     </div>
   );

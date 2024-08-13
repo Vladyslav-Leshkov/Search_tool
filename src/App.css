@@ -10,7 +10,7 @@
   align-items: center;
   width: 40%;
   margin: 0 auto;
-  margin-top: 60px;
+  margin-top: 50px;
 }
 
 .input-container {
@@ -18,7 +18,7 @@
   flex-direction: column;
   align-items: flex-start;
   width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
 
 .input {
@@ -50,6 +50,11 @@ textarea::placeholder {
   /* border: 20px solid #adb5bd;
   border-radius: 4px; */
   box-sizing: border-box;
+}
+
+.select-country__control {
+  border: 10px solid #ced4da;
+  border-radius: 4px;
 }
 
 .input:focus,
