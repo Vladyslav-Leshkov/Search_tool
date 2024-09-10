@@ -4,12 +4,12 @@ import countriesList from './countries';
 import Header from './Header';
 import './App.css';
 import CreatableSelect from 'react-select/creatable';
+import { Helmet } from 'react-helmet';
 
 const components = {
   DropdownIndicator: null,
 };
 
-// Функція для створення нових опцій
 const createOption = (label) => ({
   label,
   value: label,
@@ -43,10 +43,23 @@ const MultiSelectTextInput = ({ value, onChange, placeholder }) => {
         setSelectedOptions(newValue);
         onChange(newValue);
       }}
+      styles={{
+        control: (provided, state) => ({
+          ...provided,
+          outline: state.isFocused ? '1px solid #4A90E2' : '1px solid transparent',
+          borderWidth: "1px",
+          borderColor: "#898890",
+          // boxShadow: state.isFocused ? '0 0 0 2px rgba(74, 144, 226, 0.2)' : 'none',
+        }),
+        placeholder: (base) => ({
+          ...base,
+          color: "#b0adbd"
+        }),
+      }}
       onInputChange={(newValue) => setInputValue(newValue)}
       onKeyDown={handleKeyDown}
       value={selectedOptions}
-      placeholder={placeholder} // Додаємо кастомний placeholder
+      placeholder={placeholder}
     />
   );
 };
@@ -89,6 +102,20 @@ function App() {
 
   return (
     <div>
+      <Helmet>
+        <title>X-Ray Hunt</title>
+        <meta name="description" content="X-Ray Hunt helps you find top talent on LinkedIn by leveraging advanced search techniques and filters. Discover and connect with the best candidates effortlessly." />
+        <meta property="og:title" content="X-Ray Hunt" />
+        <meta property="og:description" content="X-Ray Hunt helps you find top talent on LinkedIn by leveraging advanced search techniques and filters." />
+        <meta property="og:image" content="https://vladyslav-leshkov.github.io/Search_tool/logo192.png" />
+        <meta property="og:url" content="https://vladyslav-leshkov.github.io/Search_tool/" />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="X-Ray Hunt" />
+        <meta name="twitter:description" content="X-Ray Hunt helps you find top talent on LinkedIn by leveraging advanced search techniques and filters." />
+        <meta name="twitter:image" content="https://vladyslav-leshkov.github.io/Search_tool/logo192.png" />
+        <meta name="twitter:url" content="https://vladyslav-leshkov.github.io/Search_tool/" />
+      </Helmet>
       <Header />
       <div className="container">
         <div className="input-container">
@@ -96,6 +123,27 @@ function App() {
           <Select
             className="select-country"
             options={countriesList}
+            styles={{
+              control: (base) => ({
+                ...base,
+                borderWidth: "1px",
+                borderColor: "#898890",
+                '&:hover': {
+                  borderColor: 'red',
+                }
+              }),
+              control: (provided, state) => ({
+                ...provided,
+                outline: state.isFocused ? '1px solid #4A90E2' : '1px solid transparent',
+                borderWidth: "1px",
+                borderColor: "#898890",
+                // boxShadow: state.isFocused ? '0 0 0 2px rgba(74, 144, 226, 0.2)' : 'none',
+              }),
+              placeholder: (base) => ({
+                ...base,
+                color: "#b0adbd"
+              }),
+            }}
             getOptionLabel={(option) => option.value}
             getOptionValue={(option) => option.value}
             onChange={(selectedOption) => setSelectedCountry(selectedOption)}
@@ -126,7 +174,7 @@ function App() {
           <MultiSelectTextInput
             value={keywordsToInclude}
             onChange={(selectedOptions) => setKeywordsToInclude(selectedOptions || [])}
-            placeholder="react"
+            placeholder="React"
           />
         </div>
 
@@ -135,7 +183,7 @@ function App() {
           <MultiSelectTextInput
             value={keywordsToExclude}
             onChange={(selectedOptions) => setKeywordsToExclude(selectedOptions || [])}
-            placeholder="recruiter"
+            placeholder="Recruiter"
           />
         </div>
       </div>
