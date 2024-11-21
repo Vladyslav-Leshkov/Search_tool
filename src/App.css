@@ -72,6 +72,8 @@ textarea::placeholder {
   box-sizing: border-box;
 }
 
+
+
 .button-container-center {
   display: flex;
   justify-content: center;

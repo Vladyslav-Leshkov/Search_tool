@@ -9,3 +9,6 @@ npm start
 
 2.  npm run build
     npm run deploy
+
+    Видалив з проекту бібліотеку gh-pages
+    npm uninstall gh-pages

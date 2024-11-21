@@ -13,7 +13,7 @@ const Header = () => {
           <h1>X-Ray Hunt</h1>
         </div>
         <div className="contacts-container">
-          <a href="https://www.linkedin.com/in/vladislav-leshkov/" className="contacts-link" target="_blank" rel="noopener noreferrer">Contacts</a>
+          <a href="https://www.linkedin.com/in/vladyslav-leshkov/" className="contacts-link" target="_blank" rel="noopener noreferrer">Contacts</a>
         </div>
       </div>
     </div>

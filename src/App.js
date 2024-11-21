@@ -19,15 +19,35 @@ const MultiSelectTextInput = ({ value, onChange, placeholder }) => {
   const [inputValue, setInputValue] = useState('');
   const [selectedOptions, setSelectedOptions] = useState(value);
 
+  // const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+
   const handleKeyDown = (event) => {
     if (!inputValue) return;
-    if (event.key === 'Enter' || event.key === 'Tab') {
+
+    if (event.key === 'Enter') {
+      event.preventDefault(); // Забороняємо перехід на інший інпут
       const newOption = createOption(inputValue);
       const updatedOptions = [...selectedOptions, newOption];
+
       setSelectedOptions(updatedOptions);
       onChange(updatedOptions);
       setInputValue('');
-      event.preventDefault();
+
+      // Повертаємо фокус на цей же інпут після натискання Enter
+      setTimeout(() => {
+        event.target.focus();
+      }, 0);
+    }
+  };
+
+  const handleBlur = () => {
+    if (inputValue) {
+      const newOption = createOption(inputValue);
+      const updatedOptions = [...selectedOptions, newOption];
+
+      setSelectedOptions(updatedOptions);
+      onChange(updatedOptions);
+      setInputValue('');
     }
   };
 
@@ -49,7 +69,6 @@ const MultiSelectTextInput = ({ value, onChange, placeholder }) => {
           outline: state.isFocused ? '1px solid #4A90E2' : '1px solid transparent',
           borderWidth: "1px",
           borderColor: "#898890",
-          // boxShadow: state.isFocused ? '0 0 0 2px rgba(74, 144, 226, 0.2)' : 'none',
         }),
         placeholder: (base) => ({
           ...base,
@@ -58,11 +77,13 @@ const MultiSelectTextInput = ({ value, onChange, placeholder }) => {
       }}
       onInputChange={(newValue) => setInputValue(newValue)}
       onKeyDown={handleKeyDown}
+      onBlur={handleBlur} // Додаємо обробник події blur
       value={selectedOptions}
       placeholder={placeholder}
     />
   );
 };
+
 
 function App() {
   const [selectedCountry, setSelectedCountry] = useState(null);
@@ -132,13 +153,13 @@ function App() {
                   borderColor: 'red',
                 }
               }),
-              control: (provided, state) => ({
-                ...provided,
-                outline: state.isFocused ? '1px solid #4A90E2' : '1px solid transparent',
-                borderWidth: "1px",
-                borderColor: "#898890",
-                // boxShadow: state.isFocused ? '0 0 0 2px rgba(74, 144, 226, 0.2)' : 'none',
-              }),
+              // control: (provided, state) => ({
+              //   ...provided,
+              //   outline: state.isFocused ? '1px solid #4A90E2' : '1px solid transparent',
+              //   borderWidth: "1px",
+              //   borderColor: "#898890",
+              //   // boxShadow: state.isFocused ? '0 0 0 2px rgba(74, 144, 226, 0.2)' : 'none',
+              // }),
               placeholder: (base) => ({
                 ...base,
                 color: "#b0adbd"
