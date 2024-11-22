@@ -19,13 +19,11 @@ const MultiSelectTextInput = ({ value, onChange, placeholder }) => {
   const [inputValue, setInputValue] = useState('');
   const [selectedOptions, setSelectedOptions] = useState(value);
 
-  // const isMobile = /Mobi|Android/i.test(navigator.userAgent);
-
   const handleKeyDown = (event) => {
     if (!inputValue) return;
 
     if (event.key === 'Enter') {
-      event.preventDefault(); // Забороняємо перехід на інший інпут
+      event.preventDefault();
       const newOption = createOption(inputValue);
       const updatedOptions = [...selectedOptions, newOption];
 
@@ -33,7 +31,6 @@ const MultiSelectTextInput = ({ value, onChange, placeholder }) => {
       onChange(updatedOptions);
       setInputValue('');
 
-      // Повертаємо фокус на цей же інпут після натискання Enter
       setTimeout(() => {
         event.target.focus();
       }, 0);
@@ -77,13 +74,12 @@ const MultiSelectTextInput = ({ value, onChange, placeholder }) => {
       }}
       onInputChange={(newValue) => setInputValue(newValue)}
       onKeyDown={handleKeyDown}
-      onBlur={handleBlur} // Додаємо обробник події blur
+      onBlur={handleBlur}
       value={selectedOptions}
       placeholder={placeholder}
     />
   );
 };
-
 
 function App() {
   const [selectedCountry, setSelectedCountry] = useState(null);
@@ -150,19 +146,12 @@ function App() {
                 borderWidth: "1px",
                 borderColor: "#898890",
                 '&:hover': {
-                  borderColor: 'red',
-                }
+                  borderColor: '#b0adbd',
+                },
               }),
-              // control: (provided, state) => ({
-              //   ...provided,
-              //   outline: state.isFocused ? '1px solid #4A90E2' : '1px solid transparent',
-              //   borderWidth: "1px",
-              //   borderColor: "#898890",
-              //   // boxShadow: state.isFocused ? '0 0 0 2px rgba(74, 144, 226, 0.2)' : 'none',
-              // }),
               placeholder: (base) => ({
                 ...base,
-                color: "#b0adbd"
+                color: "#b0adbd",
               }),
             }}
             getOptionLabel={(option) => option.value}
